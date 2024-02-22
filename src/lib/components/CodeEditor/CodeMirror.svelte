@@ -15,28 +15,25 @@
 </script>
 
 <script>
-	import { flattenDeep as _flattenDeep } from 'lodash-es'
 	import { createEventDispatcher } from 'svelte'
 	import { fade } from 'svelte/transition'
-	import { createDebouncer } from '../../utils'
-	const slowDebounce = createDebouncer(1000)
 	import { abbreviationTracker } from '../../libraries/emmet/plugin'
 
+	import { indentWithTab, standardKeymap } from '@codemirror/commands'
+	import { Compartment, EditorState } from '@codemirror/state'
+	import { EditorView, keymap } from '@codemirror/view'
+	import { basicSetup } from 'codemirror'
+	import { code as page_code } from '../../stores/app/activePage'
 	import { highlightedElement } from '../../stores/app/misc'
 	import { code as site_code } from '../../stores/data/site'
-	import { code as page_code } from '../../stores/app/activePage'
-	import { basicSetup } from 'codemirror'
-	import { EditorView, keymap } from '@codemirror/view'
-	import { standardKeymap, indentWithTab } from '@codemirror/commands'
-	import { EditorState, Compartment } from '@codemirror/state'
-	import { oneDarkTheme, ThemeHighlighting } from './theme'
-	import {
-		svelteCompletions,
-		cssCompletions,
-		extract_css_variables
-	} from './extensions/autocomplete'
 	import { getLanguage } from './extensions'
+	import {
+		cssCompletions,
+		extract_css_variables,
+		svelteCompletions
+	} from './extensions/autocomplete'
 	import highlight_active_line from './extensions/inspector'
+	import { ThemeHighlighting, oneDarkTheme } from './theme'
 
 	export let data = {}
 	export let prefix = ''
@@ -288,7 +285,9 @@
 		) {
 		color: white;
 		background: var(--color-gray-7);
-		transition: 0.1s background, 0.1s color;
+		transition:
+			0.1s background,
+			0.1s color;
 	}
 
 	:global(.ͼo .cm-tooltip-autocomplete > ul > li .cm-completionLabel) {
